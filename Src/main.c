@@ -92,7 +92,7 @@ int main(void)
   HAL_Delay(1000);
 
   ssd1306_SetCursor(23,23);
-  ssd1306_WriteString("Olivier",Font_11x18,Black);
+  ssd1306_WriteString("4ilo",Font_11x18,Black);
 
   ssd1306_UpdateScreen();
 
@@ -106,15 +106,7 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 
-	  //ssd1306_Fill(White);
-	  //ssd1306_UpdateScreen();
-	  //HAL_Delay(1000);
-	  //ssd1306_Fill(Black);
-	  //ssd1306_UpdateScreen();
-	  //HAL_Delay(1000);
 
-//	  ssd1306_WriteCommand(0x50);
-//	  HAL_Delay(10);
 
   }
   /* USER CODE END 3 */

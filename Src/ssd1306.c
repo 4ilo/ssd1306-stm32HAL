@@ -2,16 +2,15 @@
 #include"ssd1306.h"
 
 
-// Databuffer voor het scherm
+// Screenbuffer
 static uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
 
-// Een scherm-object om lokaal in te werken
+// Screen object
 static SSD1306_t SSD1306;
 
 
 //
-//	Een byte sturen naar het commando register
-//	Kan niet gebruikt worden buiten deze file
+//  Send a byte to the command register
 //
 static void ssd1306_WriteCommand(uint8_t command)
 {
@@ -20,11 +19,11 @@ static void ssd1306_WriteCommand(uint8_t command)
 
 
 //
-//	Het scherm initialiseren voor gebruik
+//	Initialize the oled screen
 //
 uint8_t ssd1306_Init(void)
 {	
-	// Even wachten zodat het scherm zeker opgestart is
+	// Wait for the screen to boot
 	HAL_Delay(100);
 	
 	/* Init LCD */
@@ -57,26 +56,23 @@ uint8_t ssd1306_Init(void)
 	ssd1306_WriteCommand(0x14); //
 	ssd1306_WriteCommand(0xAF); //--turn on SSD1306 panel
 	
-	/* Clearen scherm */
+	// Clear screen
 	ssd1306_Fill(Black);
 	
-	/* Update screen */
+	// Flush buffer to screen
 	ssd1306_UpdateScreen();
 	
-	/* Set default values */
+	// Set default values for screen object
 	SSD1306.CurrentX = 0;
 	SSD1306.CurrentY = 0;
 	
-	/* Initialized OK */
 	SSD1306.Initialized = 1;
 	
-	/* Return OK */
 	return 1;
 }
 
 //
-//	We zetten de hele buffer op een bepaalde kleur
-// 	color 	=> de kleur waarin alles moet
+//  Fill the whole screen with the given color
 //
 void ssd1306_Fill(SSD1306_COLOR color) 
 {
@@ -90,7 +86,7 @@ void ssd1306_Fill(SSD1306_COLOR color)
 }
 
 //
-//	Alle weizigingen in de buffer naar het scherm sturen
+//  Write the screenbuffer with changed to the screen
 //
 void ssd1306_UpdateScreen(void) 
 {
@@ -101,32 +97,31 @@ void ssd1306_UpdateScreen(void)
 		ssd1306_WriteCommand(0x00);
 		ssd1306_WriteCommand(0x10);
 
-		// We schrijven alles map per map weg
 		HAL_I2C_Mem_Write(&hi2c1,SSD1306_I2C_ADDR,0x40,1,&SSD1306_Buffer[SSD1306_WIDTH * i],SSD1306_WIDTH,100);
 	}
 }
 
 //
-//	1 pixel op het scherm tekenen
-//	X => X coordinaat
-//	Y => Y coordinaat
-//	color => kleur die pixel moet krijgen
+//	Draw one pixel in the screenbuffer
+//	X => X Coordinate
+//	Y => Y Coordinate
+//	color => Pixel color
 //
 void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color)
 {
 	if (x >= SSD1306_WIDTH || y >= SSD1306_HEIGHT) 
 	{
-		// We gaan niet buiten het scherm schrijven
+		// Don't write outside the buffer
 		return;
 	}
 	
-	// Kijken of de pixel geinverteerd moet worden
+	// Check if pixel should be inverted
 	if (SSD1306.Inverted) 
 	{
 		color = (SSD1306_COLOR)!color;
 	}
 	
-	// We zetten de juiste kleur voor de pixel
+	// Draw in the right color
 	if (color == White)
 	{
 		SSD1306_Buffer[x + (y / 8) * SSD1306_WIDTH] |= 1 << (y % 8);
@@ -138,7 +133,7 @@ void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color)
 }
 
 //
-//	We willen 1 char naar het scherm sturen
+//  Draw 1 char to the screen buffer
 //	ch 		=> char om weg te schrijven
 //	Font 	=> Font waarmee we gaan schrijven
 //	color 	=> Black or White
@@ -147,15 +142,15 @@ char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color)
 {
 	uint32_t i, b, j;
 	
-	// Kijken of er nog plaats is op deze lijn
+	// Check remaining space on current line
 	if (SSD1306_WIDTH <= (SSD1306.CurrentX + Font.FontWidth) ||
 		SSD1306_HEIGHT <= (SSD1306.CurrentY + Font.FontHeight))
 	{
-		// Er is geen plaats meer
+		// Not enough space on current line
 		return 0;
 	}
 	
-	// We gaan door het font
+	// Use the font to write
 	for (i = 0; i < Font.FontHeight; i++)
 	{
 		b = Font.data[(ch - 32) * Font.FontHeight + i];
@@ -172,44 +167,40 @@ char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color)
 		}
 	}
 	
-	// De huidige positie is nu verplaatst
+	// The current space is now taken
 	SSD1306.CurrentX += Font.FontWidth;
 	
-	// We geven het geschreven char terug voor validatie
+	// Return written char for validation
 	return ch;
 }
 
 //
-//	Functie voor het wegschrijven van een hele string
-// 	str => string om op het scherm te schrijven
-//	Font => Het font dat gebruikt moet worden
-//	color => Black or White
+//  Write full string to screenbuffer
 //
 char ssd1306_WriteString(char* str, FontDef Font, SSD1306_COLOR color)
 {
-	// We schrijven alle char tot een nulbyte
+	// Write until null-byte
 	while (*str) 
 	{
 		if (ssd1306_WriteChar(*str, Font, color) != *str)
 		{
-			// Het karakter is niet juist weggeschreven
+			// Char could not be written
 			return *str;
 		}
 		
-		// Volgende char
+		// Next char
 		str++;
 	}
 	
-	// Alles gelukt, we sturen dus 0 terug
+	// Everything ok
 	return *str;
 }
 
 //
-//	Zet de cursor op een coordinaat
+//	Position the cursor
 //
 void ssd1306_SetCursor(uint8_t x, uint8_t y) 
 {
-	/* Set write pointers */
 	SSD1306.CurrentX = x;
 	SSD1306.CurrentY = y;
 }

@@ -1,5 +1,5 @@
 
-#include "stm32f4xx_hal.h"
+#include "stm32f1xx_hal.h"
 #include "fonts.h"
 
 /**
@@ -53,12 +53,13 @@ extern I2C_HandleTypeDef SSD1306_I2C_PORT;
 //
 //  Function definitions
 //
-uint8_t ssd1306_Init(void);
+uint8_t ssd1306_Init(I2C_HandleTypeDef *i2c_interface);
 void ssd1306_Fill(SSD1306_COLOR color);
-void ssd1306_UpdateScreen(void);
+void ssd1306_UpdateScreen(I2C_HandleTypeDef *i2c_interface);
 void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color);
 char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color);
 char ssd1306_WriteString(char* str, FontDef Font, SSD1306_COLOR color);
 void ssd1306_SetCursor(uint8_t x, uint8_t y);
 
 #endif
+

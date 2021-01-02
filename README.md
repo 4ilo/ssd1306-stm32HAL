@@ -5,7 +5,7 @@ This library works with i2c and is configured for 128x64 oled panels by default.
 If you search 4-wire SPI support, you can find it in the [afiskon/stm32-ssd1306](https://github.com/afiskon/stm32-ssd1306) fork.
 
 
-# Usage
+## Usage
 
 Compile and link the library files in your project.
 

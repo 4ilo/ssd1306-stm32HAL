@@ -202,6 +202,14 @@ char ssd1306_WriteString(char* str, FontDef Font, SSD1306_COLOR color)
 }
 
 //
+//  Invert background/foreground colors
+//
+void ssd1306_InvertColors(void)
+{
+    SSD1306.Inverted = !SSD1306.Inverted;
+}
+
+//
 //  Set cursor position
 //
 void ssd1306_SetCursor(uint8_t x, uint8_t y)

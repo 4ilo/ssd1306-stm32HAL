@@ -36,8 +36,8 @@ ssd1306_UpdateScreen(&hi2c1);
 
 ### 128x32 example
 The library can be used with different screen sizes by redefining the `SSD1306_WIDTH` and `SSD_1306_HEIGHT` defines.
-Some smaller screens might be wired with interlacing, if you encounter issues related to interlacing defining `SSD1306_COM_LR_DISABLE_REMAP` will configure the controller to support this feature.
+Some smaller screens might be wired with interlacing, if you encounter issues related to interlacing defining `SSD1306_COM_LR_REMAP` will configure the controller to support this feature.
 
 ```
-make EXTRA_CFLAGS="-DSSD1306_HEIGHT=32 -DSSD1306_COM_LR_DISABLE_REMAP"
+make EXTRA_CFLAGS="-DSSD1306_HEIGHT=32 -DSSD1306_COM_LR_REMAP"
 ```

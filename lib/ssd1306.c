@@ -52,10 +52,10 @@ uint8_t ssd1306_Init(I2C_HandleTypeDef *hi2c)
     status += ssd1306_WriteCommand(hi2c, 0x22);
 
     status += ssd1306_WriteCommand(hi2c, 0xDA);   // Set com pins hardware configuration
-#ifndef SSD1306_COM_LR_DISABLE_REMAP
-    status += ssd1306_WriteCommand(hi2c, 0x12);   // Enable COM left/right remap
+#ifndef SSD1306_COM_LR_REMAP
+    status += ssd1306_WriteCommand(hi2c, 0x32);   // Enable COM left/right remap
 #else
-    status += ssd1306_WriteCommand(hi2c, 0x02);   // Do not use COM left/right remap
+    status += ssd1306_WriteCommand(hi2c, 0x12);   // Do not use COM left/right remap
 #endif // SSD1306_COM_LR_REMAP
 
     status += ssd1306_WriteCommand(hi2c, 0xDB);   // Set vcomh

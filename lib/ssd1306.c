@@ -39,8 +39,10 @@ uint8_t ssd1306_Init(I2C_HandleTypeDef *hi2c)
     status += ssd1306_WriteCommand(hi2c, 0xFF);
     status += ssd1306_WriteCommand(hi2c, 0xA1);   // Set segment re-map 0 to 127
     status += ssd1306_WriteCommand(hi2c, 0xA6);   // Set normal display
+
     status += ssd1306_WriteCommand(hi2c, 0xA8);   // Set multiplex ratio(1 to 64)
-    status += ssd1306_WriteCommand(hi2c, 0x3F);
+    status += ssd1306_WriteCommand(hi2c, SSD1306_HEIGHT - 1);
+
     status += ssd1306_WriteCommand(hi2c, 0xA4);   // 0xa4,Output follows RAM content;0xa5,Output ignores RAM content
     status += ssd1306_WriteCommand(hi2c, 0xD3);   // Set display offset
     status += ssd1306_WriteCommand(hi2c, 0x00);   // No offset
@@ -48,8 +50,14 @@ uint8_t ssd1306_Init(I2C_HandleTypeDef *hi2c)
     status += ssd1306_WriteCommand(hi2c, 0xF0);   // Set divide ratio
     status += ssd1306_WriteCommand(hi2c, 0xD9);   // Set pre-charge period
     status += ssd1306_WriteCommand(hi2c, 0x22);
+
     status += ssd1306_WriteCommand(hi2c, 0xDA);   // Set com pins hardware configuration
-    status += ssd1306_WriteCommand(hi2c, 0x12);
+#ifdef SSD1306_COM_LR_REMAP
+    status += ssd1306_WriteCommand(hi2c, 0x32);   // Enable COM left/right remap
+#else
+    status += ssd1306_WriteCommand(hi2c, 0x12);   // Do not use COM left/right remap
+#endif // SSD1306_COM_LR_REMAP
+
     status += ssd1306_WriteCommand(hi2c, 0xDB);   // Set vcomh
     status += ssd1306_WriteCommand(hi2c, 0x20);   // 0x20,0.77xVcc
     status += ssd1306_WriteCommand(hi2c, 0x8D);   // Set DC-DC enable

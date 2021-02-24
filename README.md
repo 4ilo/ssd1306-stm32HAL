@@ -23,7 +23,7 @@ Small example:
 I2C_HandleTypeDef hi2c1;
 
 // Init lcd using one of the stm32HAL i2c typedefs
-ssd_1306_Init(&hi2c1);
+ssd1306_Init(&hi2c1);
 
 // Write data to local screenbuffer
 ssd1306_SetCursor(0, 36);

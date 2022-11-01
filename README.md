@@ -4,6 +4,7 @@ This library works with i2c and is configured for 128x64 oled panels by default.
 
 If you search 4-wire SPI support, you can find it in the [afiskon/stm32-ssd1306](https://github.com/afiskon/stm32-ssd1306) fork.
 
+If you need a font generator to add custom fonts you can find it here: [the-this-pointer/glcd-font-calculator](https://github.com/the-this-pointer/glcd-font-calculator).
 
 ## Usage
 

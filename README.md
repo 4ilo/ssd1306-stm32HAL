@@ -42,3 +42,9 @@ Some smaller screens might be wired with interlacing, if you encounter issues re
 ```
 make EXTRA_CFLAGS="-DSSD1306_HEIGHT=32 -DSSD1306_COM_LR_REMAP"
 ```
+
+Some screens might also be using another 'Sequential COM pin configuration'. Defining `SSD1306_COM_ALTERNATIVE_PIN_CONFIG` as 0 will configure the controller to use another configuration.
+
+```
+make EXTRA_CFLAGS="-DSSD1306_HEIGHT=32 -DSSD1306_COM_LR_REMAP -DSSD1306_COM_ALTERNATIVE_PIN_CONFIG=0"
+```

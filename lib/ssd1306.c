@@ -52,11 +52,7 @@ uint8_t ssd1306_Init(I2C_HandleTypeDef *hi2c)
     status += ssd1306_WriteCommand(hi2c, 0x22);
 
     status += ssd1306_WriteCommand(hi2c, 0xDA);   // Set com pins hardware configuration
-#ifdef SSD1306_COM_LR_REMAP
-    status += ssd1306_WriteCommand(hi2c, 0x32);   // Enable COM left/right remap
-#else
-    status += ssd1306_WriteCommand(hi2c, 0x12);   // Do not use COM left/right remap
-#endif // SSD1306_COM_LR_REMAP
+    status += ssd1306_WriteCommand(hi2c, SSD1306_COM_LR_REMAP << 5 | SSD1306_COM_ALTERNATIVE_PIN_CONFIG << 4 | 0x02);   
 
     status += ssd1306_WriteCommand(hi2c, 0xDB);   // Set vcomh
     status += ssd1306_WriteCommand(hi2c, 0x20);   // 0x20,0.77xVcc
@@ -190,7 +186,7 @@ char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color)
 //
 //  Write full string to screenbuffer
 //
-char ssd1306_WriteString(char* str, FontDef Font, SSD1306_COLOR color)
+char ssd1306_WriteString(const char* str, FontDef Font, SSD1306_COLOR color)
 {
     // Write until null-byte
     while (*str)

@@ -206,6 +206,34 @@ char ssd1306_WriteString(const char* str, FontDef Font, SSD1306_COLOR color)
 }
 
 //
+//  Draw bitmap to the screen buffer
+//  bmp      => bitmap (128x64) to write
+//
+//  color   => Black or White
+//
+void ssd1306_WriteBitmap(uint8_t *bmp, SSD1306_COLOR color)
+{
+    uint8_t i,j, k;
+
+
+
+    // Translate font to screenbuffer
+    for (i = 0; i < SSD1306_HEIGHT; i++)
+    {
+
+    	for (j = 0; j < SSD1306_WIDTH/8; j++)
+        {
+        	for (k=0;k<8;k++){
+				if ((         *(bmp+SSD1306_WIDTH/8*i+j)      << k) & 0x80){ssd1306_DrawPixel( j*8+k , i , (SSD1306_COLOR) color);}
+
+				else{ssd1306_DrawPixel( j*8+k , i , (SSD1306_COLOR)!color);}
+        	}
+        }
+    }
+
+}
+
+//
 //  Invert background/foreground colors
 //
 void ssd1306_InvertColors(void)
